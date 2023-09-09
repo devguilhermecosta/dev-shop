@@ -58,10 +58,31 @@
 }
 
 .C-cart_total {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
-  align-self: flex-start;
+  align-self: flex-end;
+  margin-top: 10px;
 }
+
+.C-cart__is_empty {
+  text-align: center;
+}
+
+.C-cart__is_empty p {
+  font-size: 14px;
+  padding: 8px 4px;
+}
+
+.C-cart__is_empty a {
+  font-size: 14px;
+  text-decoration: none;
+  color: #f1f1f1;
+  background-color: #287ddf;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 
 @media screen and (max-width: 475px) {
   .C-cart_details {

@@ -1,9 +1,10 @@
 import './home.modules.css';
 import { BsCart } from 'react-icons/bs';
 import { api } from '../../services/api';
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useContext } from 'react';
+import { CartContext } from '../../contexts/cartcontext/cartcontext';
 
-interface ProductProps {
+export interface ProductProps {
   id: number;
   title: string;
   description: string;
@@ -12,6 +13,7 @@ interface ProductProps {
 }
 
 export default function Home() {
+  const { handleAddItem } = useContext(CartContext);
   const [products, setProducts] = useState<ProductProps[]>([]);
 
   useEffect(() => {
@@ -23,6 +25,10 @@ export default function Home() {
     getProducts();
 
   }, [])
+
+  function handleAddCartItem(product: ProductProps) {
+    handleAddItem(product);
+  }
 
   return (
     <main className="C-main">
@@ -42,7 +48,13 @@ export default function Home() {
                   style: "currency",
                   currency: "BRL"
                 })}
-                <span><BsCart size={20} color="#ffffff"/></span>
+                <span>
+                  <BsCart
+                    size={20} 
+                    color="#ffffff" 
+                    onClick={() => (handleAddCartItem(product))} 
+                  />
+                </span>
               </p>
             </div>
           </section>
