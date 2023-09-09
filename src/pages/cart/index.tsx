@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { CartContext } from '../../contexts/cartcontext/cartcontext';
 
 export default function Cart() {
-  const { cart } = useContext(CartContext);
+  const { cart, handleAddItem, handleRemoveItemCart, total } = useContext(CartContext);
 
   return (
     <main className="C-main">
@@ -31,9 +31,9 @@ export default function Cart() {
             })}</p>
 
             <div className="C-cart_control_quantity">
-              <span>-</span>
+              <span onClick={() => handleRemoveItemCart(item)}>-</span>
               <p>{item.amount}</p>
-              <span>+</span>
+              <span onClick={() => handleAddItem(item)} >+</span>
             </div>
 
             <p className="C-cart_subtotal">Subtotal: {item.total.toLocaleString("pt-BR", {
@@ -44,7 +44,7 @@ export default function Cart() {
         ))}
 
         {cart.length !== 0 && (
-          <p className="C-cart_total">Total: R$ 1.000,00</p>
+          <p className="C-cart_total">Total: {total}</p>
         )}
 
       </section>

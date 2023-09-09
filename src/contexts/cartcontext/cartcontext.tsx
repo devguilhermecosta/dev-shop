@@ -5,6 +5,8 @@ interface CartContextData {
   cart: CartProps[];
   cartAmount: number;
   handleAddItem: (product: ProductProps) => void;
+  handleRemoveItemCart: (product: ProductProps) => void;
+  total: string;
 }
 
 interface CartProps {
@@ -27,18 +29,23 @@ export const CartContext = createContext({} as CartContextData);
 
 export default function CartProvider({ children }: CartPrivderProps) {
   const [cart, setCart] = useState<CartProps[]>([]);
+  const [totalCart, setTotalCart] = useState("");
 
   function handleAddItem(newItem: ProductProps) {
-    const itemIndex = cart.findIndex(item => item.id === newItem.id);
+    const cartList = cart;
+    const itemIndex = cartList.findIndex(item => item.id === newItem.id);
     /*
       Verifica se o item já está no carrinho.
       Se estiver, soma a quantidade do item já existente.
       Se não estiver, cria um novo item no carrinho.
     */
     if (itemIndex !== -1) {
-      const cartItem = cart[itemIndex];
+      const cartItem = cartList[itemIndex];
       cartItem.amount += 1;
       cartItem.total = cartItem.price * cartItem.amount;
+
+      setCart(cartList);
+      calcTotalCart(cartList);
 
       return
     }
@@ -50,7 +57,36 @@ export default function CartProvider({ children }: CartPrivderProps) {
       total: newItem.price
     }
 
-    setCart([...cart, data]);
+    setCart(products => [...products, data]);
+    calcTotalCart([...cart, data]);
+  }
+
+  function handleRemoveItemCart(product: ProductProps) {
+    const itemIndex = cart.findIndex(item => item.id === product.id);
+
+    if (cart[itemIndex]?.amount > 1) {
+      const cartList = cart;
+      const itemCart = cartList[itemIndex];
+      itemCart.amount -= 1;
+      itemCart.total = itemCart.amount * itemCart.price;
+      setCart(cartList);
+      calcTotalCart(cartList);
+      return
+    }
+
+    const removeItem = cart.filter(item => item.id !== product.id);
+
+    setCart(removeItem);
+    calcTotalCart(removeItem);
+  }
+
+  function calcTotalCart(items: CartProps[]) {
+    const cartItens = items;
+    const total = cartItens.reduce((acc, item) => {return acc + item.total}, 0);
+    setTotalCart(total.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL"
+    }))
   }
 
   return (
@@ -58,7 +94,9 @@ export default function CartProvider({ children }: CartPrivderProps) {
       { 
         cart,
         cartAmount: cart.length,
-        handleAddItem
+        handleAddItem,
+        handleRemoveItemCart,
+        total: totalCart
       }
       }>
       {children}
