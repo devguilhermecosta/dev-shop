@@ -3,6 +3,7 @@ import { BsCart } from 'react-icons/bs';
 import { api } from '../../services/api';
 import { useState, useEffect,useContext } from 'react';
 import { CartContext } from '../../contexts/cartcontext/cartcontext';
+import toast from 'react-hot-toast';
 
 export interface ProductProps {
   id: number;
@@ -27,6 +28,12 @@ export default function Home() {
   }, [])
 
   function handleAddCartItem(product: ProductProps) {
+    toast.success('Produto adicionado com sucesso', {
+      style: {
+        backgroundColor: '#000000',
+        color: '#f1f1f1',
+      }
+    })
     handleAddItem(product);
   }
 
