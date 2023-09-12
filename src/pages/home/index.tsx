@@ -1,7 +1,8 @@
 import './home.modules.css';
 import { BsCart } from 'react-icons/bs';
 import { api } from '../../services/api';
-import { useState, useEffect,useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { CartContext } from '../../contexts/cartcontext/cartcontext';
 import toast from 'react-hot-toast';
 
@@ -46,7 +47,9 @@ export default function Home() {
         {products.map((product) => (
           <section className="C-product" key={product.id}>
             <div className="C-product_c_img">
-              <img src={product.cover} alt={product.title} />
+              <Link to={`/product/details/${product.id}`}>
+                <img src={product.cover} alt={product.title} />
+              </Link>
             </div>
             <div className="C-product_details">
               <h2>{product.title}</h2>
